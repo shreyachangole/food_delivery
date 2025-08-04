@@ -18,7 +18,6 @@ const categories = [
   { name: "burger", icon: <MdLunchDining size={28} /> },
 ];
 
-// Format like: main_course → Main Course
 function formatName(name) {
   return name
     .replace(/_/g, " ")

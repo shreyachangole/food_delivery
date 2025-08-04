@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GiMeat } from "react-icons/gi";
 import { FaLeaf } from "react-icons/fa";
+import { DataContext } from "../contex/UserContex";
 
 function Card({ data }) {
   const { food_image, food_name, food_type, price } = data;
+  const { cartItems, setCartItems } = useContext(DataContext);
+
+  
+  const isInCart = cartItems.some((item) => item.id === data.id);
+
+  const handleAddToCart = () => {
+    if (!isInCart) {
+      setCartItems([...cartItems, data]);
+    }
+  };
+
+  const handleRemoveFromCart = () => {
+    const updatedCart = cartItems.filter((item) => item.id !== data.id);
+    setCartItems(updatedCart);
+  };
 
   return (
     <div className='w-[270px] h-[370px] bg-white p-4 rounded-2xl flex flex-col gap-3 shadow-md hover:shadow-xl hover:scale-[1.03] transition-transform duration-300'>
@@ -32,8 +48,15 @@ function Card({ data }) {
         </div>
       </div>
 
-      <button className='w-full mt-auto p-2 rounded-xl bg-green-200 text-green-900 font-semibold hover:bg-green-300 transition'>
-        Add to My Plate 🍽️
+      <button
+        onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
+        className={`w-full mt-auto p-2 rounded-xl font-semibold transition ${
+          isInCart
+            ? "bg-red-200 text-red-900 hover:bg-red-300"
+            : "bg-green-200 text-green-900 hover:bg-green-300"
+        }`}
+      >
+        {isInCart ? "Remove from Plate ❌" : "Add to My Plate 🍽️"}
       </button>
     </div>
   );
